@@ -1,0 +1,3 @@
+﻿  WPM_RTCG.cpp
+d:\rtcg\wpm_rtcg\wpm_rtcg\wpm_rtcg.cpp(155): warning C4244: "Initialisierung": Konvertierung von "double" in "GLfloat", möglicher Datenverlust
+  WPM_RTCG.vcxproj -> D:\RTCG\WPM_RTCG\Debug\WPM_RTCG.exe

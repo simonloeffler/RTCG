@@ -1,0 +1,26 @@
+#version 330								
+											
+in vec4 vertex_colors;		
+in vec3 normals;
+
+out vec4 colors;	
+
+struct light_directional
+{
+	vec3 light_color;
+	float ambient_light_intensity;
+
+	vec3 light_direction;
+	float diffuse_light_intensity;
+};
+
+uniform light_directional directional_light;
+											
+void main()
+{								
+	vec4 final_ambient_color = vec4(directional_light.light_color, 1.0f) * directional_light.ambient_light_intensity;
+
+	float diffuse_indicator = max(dot(normalize(normals), normalize(directional_light.light_direction)), 0.0f);
+	vec4 final_diffuse_color = vec4(directional_light.light_color, 1.0f) * directional_light.diffuse_light_intensity * diffuse_indicator;
+	colors = vertex_colors * (final_ambient_color + final_diffuse_color);
+}
