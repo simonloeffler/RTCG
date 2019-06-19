@@ -28,7 +28,8 @@ void Mesh_Object::Create_Object_Mesh(GLfloat *vertices, unsigned int *indices, u
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 6, (void*)(sizeof(vertices[0]) * 3));
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(1);
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

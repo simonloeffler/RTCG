@@ -24,7 +24,9 @@ void GL_Light::use_light(GLuint ambient_intensity_location, GLuint ambient_color
 	GLint diffuse_intensity_location, GLint general_light_direction_location)
 {
 	glUniform3f(ambient_color_location, global_light_color.x, global_light_color.y, global_light_color.z);
-	glUniform1f(ambient_intensity_location, ambient_light_intensity);	glUniform3f(general_light_direction_location, direction_general_light.x, direction_general_light.y, direction_general_light.z);
+	glUniform1f(ambient_intensity_location, ambient_light_intensity);
+
+	glUniform3f(general_light_direction_location, direction_general_light.x, direction_general_light.y, direction_general_light.z);
 	glUniform1f(diffuse_intensity_location, diffuse_light_intensity);
 }
 

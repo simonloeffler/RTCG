@@ -3,6 +3,8 @@
 in vec4 vertex_colors;		
 in vec3 normals;
 
+in vec3 position_pixel;
+
 out vec4 colors;	
 
 struct light_directional
@@ -14,13 +16,39 @@ struct light_directional
 	float diffuse_light_intensity;
 };
 
+struct material{
+	float specular_intensity;
+	float specular_roughness;
+};
+
+
 uniform light_directional directional_light;
+
+uniform material shiny_material;
+uniform vec3 position_eyes;
 											
 void main()
 {								
 	vec4 final_ambient_color = vec4(directional_light.light_color, 1.0f) * directional_light.ambient_light_intensity;
 
 	float diffuse_indicator = max(dot(normalize(normals), normalize(directional_light.light_direction)), 0.0f);
-	vec4 final_diffuse_color = vec4(directional_light.light_color, 1.0f) * directional_light.diffuse_light_intensity * diffuse_indicator;
-	colors = vertex_colors * (final_ambient_color + final_diffuse_color);
+	vec4 final_diffuse_color = vec4(directional_light.light_color, 1.0f) * directional_light.diffuse_light_intensity * diffuse_indicator;
+
+	vec4 final_specular_color = vec4(0, 0, 0, 0);
+
+	if(diffuse_indicator > 0.0f){
+
+		vec3 facing_direction = normalize(position_eyes - position_pixel);
+		vec3 reflection_direction = normalize(reflect(directional_light.light_direction, normalize(normals)));
+		float specular_indicator = dot(facing_direction, reflection_direction);
+
+		if(specular_indicator > 0.0f){
+
+			specular_indicator = pow(specular_indicator, shiny_material.specular_roughness);
+			final_specular_color = vec4(directional_light.light_color * shiny_material.specular_intensity * specular_indicator, 1.0f);
+		}
+	}
+
+	colors = vertex_colors * (final_ambient_color + final_diffuse_color + final_specular_color);
+
 }

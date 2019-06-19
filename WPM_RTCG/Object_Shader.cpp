@@ -12,7 +12,8 @@ Object_Shader::Object_Shader()
 	uniform_ambient_intensity = 0;
 
 	uniform_diffuse_intensity = 0;
-	uniform_light_direction = 0;
+	uniform_light_direction = 0;
+
 }
 
 void Object_Shader::Create_From_String(const char* vertex_Code, const char* fragment_Code) 
@@ -88,6 +89,9 @@ void Object_Shader::compileObjectShader(const char* vertex_Code, const char* fra
 	uniform_diffuse_intensity = glGetUniformLocation(obj_shader_ID, "directional_light.diffuse_light_intensity");
 	uniform_light_direction = glGetUniformLocation(obj_shader_ID, "directional_light.light_direction");
 
+	uniform_specular_intensity = glGetUniformLocation(obj_shader_ID, "shiny_material.specular_intensity");
+	uniform_specular_roughness = glGetUniformLocation(obj_shader_ID, "shiny_material.specular_roughness");
+	uniform_eye_position = glGetUniformLocation(obj_shader_ID, "position_eyes");
 }
 
 void Object_Shader::Create_From_File(const char* location_vertex_shader, const char* location_fragment_shader)
@@ -161,17 +165,33 @@ void Object_Shader::Clear_Object_Shader()
 GLuint Object_Shader::Get_Ambient_Color_Location() 
 {
 	return uniform_ambient_color;
-}GLuint Object_Shader::Get_Ambient_Intensity_Location() 
+}
+
+GLuint Object_Shader::Get_Ambient_Intensity_Location() 
 {
 	return uniform_ambient_intensity;
-}GLuint Object_Shader::Get_Diffuse_Intensity_Location() 
+}
+
+GLuint Object_Shader::Get_Diffuse_Intensity_Location() 
 {
 	return uniform_diffuse_intensity;
 }
 GLuint Object_Shader::Get_Light_Direction_Location() 
 {
 	return uniform_light_direction;
-}
+}
+GLuint Object_Shader::Get_Specular_Intensity_Location() 
+{
+	return uniform_specular_intensity;
+}
+GLuint Object_Shader::Get_Specular_Roughness_Location() 
+{
+	return uniform_specular_roughness;
+}
+GLuint Object_Shader::Get_Eye_Position_Location() 
+{
+	return uniform_eye_position;
+}
 Object_Shader::~Object_Shader()
 {
 	Clear_Object_Shader();

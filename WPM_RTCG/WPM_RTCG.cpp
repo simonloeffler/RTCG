@@ -18,6 +18,7 @@
 #include "GL_Window.h"
 #include "GL_Camera.h"
 #include "GL_Light.h"
+#include "Object_Material.h"
 
 #define GLM_FORCE_CTOR_INIT
 
@@ -49,6 +50,9 @@ GL_Window mainwindow;
 GL_Camera maincamera;
 
 GL_Light base_light;
+
+Object_Material shiny_material;
+Object_Material rough_material;
 
 void average_object_normals(unsigned int *indices, unsigned int count_indices, GLfloat *vertices, unsigned int count_vertices,
 	unsigned int lenght_vertices, unsigned int offset_normals)
@@ -136,20 +140,28 @@ int main()
 	createObjects();
 	Create_Object_Shaders();
 
-	maincamera = GL_Camera(glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f, 0.0f, 0.1f, 0.1f);
+	maincamera = GL_Camera(glm::vec3(0.0f, 0.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f, 0.0f, 0.1f, 0.1f);
 
 	GLuint uniform_projection = 0;
 	GLuint uniform_model = 0;
 	GLuint uniform_view = 0;
 
-	base_light = GL_Light(1.0f, 1.0f, 1.0f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f);
+	shiny_material = Object_Material(1.0f, 64);
+	rough_material = Object_Material(0.25f, 2);
+
+	base_light = GL_Light(1.0f, 1.0f, 1.0f, 0.5f, 0.0f, -3.0f, 0.0f, 1.0f);
 	GLuint uniform_ambient_intensity = 0;
 	GLuint uniform_ambient_color = 0;
 
 	GLuint uniform_light_direction = 0;
 	GLuint uniform_diffuse_intensity = 0;
 
-	glm::mat4 projection = glm::perspective(45.0f,(GLfloat)mainwindow.getbufferwidth() /(GLfloat)mainwindow.getbufferheight(), 0.1f, 150.0f);
+	GLuint uniform_specular_intensity = 0;
+	GLuint uniform_specular_roughness = 0;
+	GLuint uniform_eye_position = 0;
+
+	glm::mat4 projection = glm::perspective(45.0f,(GLfloat)mainwindow.getbufferwidth() /(GLfloat)mainwindow.getbufferheight(), 0.1f, 150.0f);
+
 	while (!mainwindow.getshouldclose()) 
 	{
 		GLfloat time_step_now = glfwGetTime();
@@ -188,6 +200,10 @@ int main()
 		uniform_light_direction = list_shaders[0].Get_Light_Direction_Location();
 		uniform_diffuse_intensity = list_shaders[0].Get_Diffuse_Intensity_Location();
 
+		uniform_eye_position = list_shaders[0].Get_Eye_Position_Location();
+		uniform_specular_intensity = list_shaders[0].Get_Specular_Intensity_Location();
+		uniform_specular_roughness = list_shaders[0].Get_Specular_Roughness_Location();
+
 		base_light.use_light(uniform_ambient_intensity, uniform_ambient_color, uniform_diffuse_intensity, uniform_light_direction);
 
 		glm::mat4 model(1);												//Identitätsmatrix
@@ -217,7 +233,8 @@ int main()
 		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniform_view, 1, GL_FALSE, glm::value_ptr(maincamera.view_matrix_calculation()));
-		
+
+		shiny_material.use_object_material(uniform_specular_intensity, uniform_specular_roughness);
 		list_objects[0]->Render_Object_Mesh();
 		//list_objects[0]->Clear_Object_Mesh();
 

@@ -21,6 +21,9 @@ class Object_Shader
 		GLuint Get_Ambient_Intensity_Location();
 		GLuint Get_Diffuse_Intensity_Location();
 		GLuint Get_Light_Direction_Location();
+		GLuint Get_Specular_Intensity_Location();
+		GLuint Get_Specular_Roughness_Location();
+		GLuint Get_Eye_Position_Location();
 
 		void Use_Object_Shader();
 
@@ -31,7 +34,7 @@ class Object_Shader
 	private:
 
 		GLuint obj_shader_ID, uniform_model, uniform_projection, uniform_view, uniform_ambient_intensity, uniform_ambient_color,
-			uniform_diffuse_intensity, uniform_light_direction;
+			uniform_diffuse_intensity, uniform_light_direction, uniform_eye_position, uniform_specular_intensity, uniform_specular_roughness;
 		void compileObjectShader(const char* vertex_Code, const char* fragment_Code);
 		void addingObjectShaders(GLuint shader_program, const char* shader_Code, GLenum shader_type);
 		std::string Read_File(const char* file_location);

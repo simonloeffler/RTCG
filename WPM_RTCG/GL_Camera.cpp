@@ -16,6 +16,10 @@ GL_Camera::GL_Camera(glm::vec3 initial_camera_position, glm::vec3 initial_up_dir
 	update();
 }
 
+glm::vec3 GL_Camera::get_camera_position() {
+	return camera_position;
+}
+
 void GL_Camera::update()
 {
 	front_direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));

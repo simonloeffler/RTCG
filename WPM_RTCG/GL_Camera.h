@@ -15,6 +15,7 @@ public:
 	void control_structure_keys(bool* keys, GLfloat delta_time);
 	void control_stucture_mouse(GLfloat change_x_position, GLfloat change_y_position);
 
+	glm::vec3 get_camera_position();
 	glm::mat4 view_matrix_calculation();
 
 	~GL_Camera();
